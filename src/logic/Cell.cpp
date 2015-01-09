@@ -1,4 +1,4 @@
-#include "Cell.hpp"
+#include "logic/Cell.hpp"
 
 namespace gol
 {
@@ -7,16 +7,16 @@ namespace gol
     {
     }
     
-    Cell::~Cell
+    Cell::~Cell()
     {
     }
     
-    void Cell:setState(const State state)
+    void Cell::setState(const State state)
     {
         state_ = state;
     }
     
-    State Cell:getState() const
+    Cell::State Cell::getState() const
     {
         return state_;
     }

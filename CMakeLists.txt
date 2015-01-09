@@ -6,15 +6,15 @@ set(GOL_LIB "gol")
 set(GOL_EXEC "GameOfLife")
 set(GOL_TEST_EXEC "TestGameOfLife")
 
+include_directories("src")
+
 get_filename_component(SFML_ROOT "./lib/SFML-2.2" ABSOLUTE)
 get_filename_component(CATCH_ROOT "./lib/Catch" ABSOLUTE)
 get_filename_component(GOL_MODULES_PATH "./cmake-modules" ABSOLUTE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${GOL_MODULES_PATH})
 
-add_subdirectory(lib)
-
 find_package(SFML 2 COMPONENTS system window graphics audio network REQUIRED)
 find_package(Catch)
 
-#add_subdirectory(src)
+add_subdirectory(src)
 #add_subdirectory(test)

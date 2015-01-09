@@ -1,5 +1,5 @@
 file(GLOB GOL_SRC "logic/*.cpp")
-set(GOL_MAIN "main.cpp"
+set(GOL_MAIN "main.cpp")
 
 add_library(${GOL_LIB} ${GOL_SRC})
 

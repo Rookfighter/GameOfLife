@@ -1,13 +1,15 @@
+#ifndef LOGIC_CELL_HPP
+#define LOGIC_CELL_HPP
+
 namespace gol
 {
     class Cell
     {
+    public:
+        enum State {ALIVE, DEAD};
     private:
         State state_;
-    
     public:
-        enum State = {ALIVE, DEAD};
-        
         Cell();
         ~Cell();
         
@@ -15,3 +17,5 @@ namespace gol
         State getState() const;
     };
 }
+
+#endif

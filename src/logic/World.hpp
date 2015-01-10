@@ -2,6 +2,7 @@
 #define LOGIC_WORLD_HPP
 
 #include "logic/GridUpdater.hpp"
+#include "logic/GridDrawer.hpp"
 
 namespace gol
 {
@@ -13,6 +14,7 @@ namespace gol
         Grid grid_;
 
         GridUpdater updater_;
+        GridDrawer drawer_;
     public:
         World();
         World(const unsigned int width, const unsigned int height);
@@ -25,7 +27,7 @@ namespace gol
         const Grid& getGrid() const;
 
         void update();
-        void render();
+        void draw(sf::RenderTarget& target) const;
     };
 
 }

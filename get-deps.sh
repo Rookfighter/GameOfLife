@@ -29,6 +29,13 @@ CATCH_RESULT_NAME="Catch"
 CATCH_RESULT_DIR="$DEP_INSTALL_DIR/$CATCH_RESULT_NAME"
 CATCH_DONWLOAD_URL="https://github.com/philsquared/Catch/archive/master.zip"
 
+# Information for getting Easylogging++
+EASYLOG_ARCH_NAME="Easylogging++.tar.gz"
+EASYLOG_ARCH_PATH="$DEP_INSTALL_DIR/$EASYLOG_ARCH_NAME"
+EASYLOG_RESULT_NAME="Easylogging++"
+EASYLOG_RESULT_DIR="$DEP_INSTALL_DIR/$EASYLOG_RESULT_NAME"
+EASYLOG_DONWLOAD_URL="https://github.com/easylogging/easyloggingpp/releases/download/v9.80/easyloggingpp_v9.80.tar.gz"
+
 echo "Getting dependencies"
 mkdir -p $DEP_INSTALL_DIR
 cd $DEP_INSTALL_DIR
@@ -66,6 +73,16 @@ else
     unzip -qq "$CATCH_ARCH_NAME"
     mv "$CATCH_EXTRACT_NAME" "$CATCH_RESULT_NAME"
     rm -f "$CATCH_ARCH_NAME"
+fi
+
+if [ -d $EASYLOG_RESULT_DIR ]; then
+    echo "-- $EASYLOG_RESULT_NAME already exists"
+else
+    echo "-- Getting $EASYLOG_RESULT_NAME"
+    wget "$EASYLOG_DONWLOAD_URL" -O "$EASYLOG_ARCH_NAME"
+    mkdir -p "$EASYLOG_RESULT_NAME"
+    tar xzf "$EASYLOG_ARCH_NAME" -C "$EASYLOG_RESULT_NAME"
+    rm -f "$EASYLOG_ARCH_NAME"
 fi
 
 cd $CURRDIR

@@ -1,6 +1,8 @@
 Debug/
 Release/
 lib/
+log/
+logs/
 
 *.project
 *.cproject

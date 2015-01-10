@@ -1,6 +1,8 @@
 #ifndef GOL_GRIDUPDATER_HPP
 #define GOL_GRIDUPDATER_HPP
 
+#include <set>
+#include <array>
 #include "logic/Grid.hpp"
 
 namespace gol
@@ -9,11 +11,14 @@ namespace gol
     {
     private:
         Grid &grid_;
-        std::list<Coordinate> willDie_;
-        std::list<Coordinate> willBeBorn_;
+        std::set<Coordinate, bool (*) (const Coordinate&, const Coordinate&)> willDie_;
+        std::set<Coordinate, bool (*) (const Coordinate&, const Coordinate&)> willBeBorn_;
 
-        void getDeadCellsWithLivingNeighbours();
-        unsigned int getLivingNeighbourCount(const Coordinate& coordinate);
+        static const unsigned int NEIGHBOURS = 8;
+
+        void updateStateChanges();
+        void updateCells();
+        unsigned int getDeadNeighbours(const Coordinate &coordinate, std::array<Coordinate, NEIGHBOURS> &neighbours);
     public:
         GridUpdater(Grid &grid);
         ~GridUpdater();

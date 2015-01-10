@@ -1,7 +1,7 @@
 #ifndef LOGIC_WORLD_HPP
 #define LOGIC_WORLD_HPP
 
-#include "logic/Grid.hpp"
+#include "logic/GridUpdater.hpp"
 
 namespace gol
 {
@@ -11,6 +11,8 @@ namespace gol
     private:
         std::list<Coordinate> initialLivingCells_;
         Grid grid_;
+
+        GridUpdater updater_;
     public:
         World();
         World(const unsigned int width, const unsigned int height);

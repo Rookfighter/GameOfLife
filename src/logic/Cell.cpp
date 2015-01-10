@@ -20,4 +20,5 @@ namespace gol
     {
         return state_;
     }
+
 }

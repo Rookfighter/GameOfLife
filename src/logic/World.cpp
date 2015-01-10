@@ -5,12 +5,12 @@ namespace gol
 {
 
     World::World()
-    :grid_()
+    :grid_(), updater_(grid_)
     {
     }
 
     World::World(const unsigned int width, const unsigned int height)
-    :grid_(width, height)
+    :grid_(width, height), updater_(grid_)
     {
     }
 
@@ -60,6 +60,7 @@ namespace gol
 
     void World::update()
     {
+        updater_.update();
     }
 
     void World::render()

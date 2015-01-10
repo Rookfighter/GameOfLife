@@ -27,5 +27,4 @@ namespace gol
     {
         return x == coordinate.x && y == coordinate.y;
     }
-
 }

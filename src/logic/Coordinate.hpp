@@ -17,8 +17,8 @@ namespace gol
         void set(const unsigned px, const unsigned py);
 
         bool operator==(const Coordinate &coordinate) const;
-    };
 
+    };
 }
 
 #endif

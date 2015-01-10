@@ -13,6 +13,14 @@ SFML_RESULT_NAME="SFML-2.2"
 SFML_RESULT_DIR="$DEP_INSTALL_DIR/$SFML_RESULT_NAME"
 SFML_DONWLOAD_URL="www.sfml-dev.org/files/SFML-2.2-linux-gcc-64-bit.tar.gz"
 
+# Information for getting TGUI
+TGUI_ARCH_NAME="TGUI.zip"
+TGUI_ARCH_PATH="$DEP_INSTALL_DIR/$TGUI_ARCH_NAME"
+TGUI_EXTRACT_NAME="TGUI-0.6.6-2"
+TGUI_RESULT_NAME="TGUI"
+TGUI_RESULT_DIR="$DEP_INSTALL_DIR/$TGUI_RESULT_NAME"
+TGUI_DONWLOAD_URL="https://github.com/texus/TGUI/archive/v0.6.6-2.zip"
+
 # Information for getting Catch
 CATCH_ARCH_NAME="Catch.zip"
 CATCH_ARCH_PATH="$DEP_INSTALL_DIR/$CATCH_ARCH_NAME"
@@ -32,6 +40,22 @@ else
     wget "$SFML_DONWLOAD_URL" -O "$SFML_ARCH_NAME"
     tar xzf "$SFML_ARCH_NAME"
     rm -f "$SFML_ARCH_NAME"
+fi
+
+if [ -d $TGUI_RESULT_DIR ]; then
+    echo "-- $TGUI_RESULT_NAME already exists"
+else
+    echo "-- Getting $TGUI_RESULT_NAME"
+    wget "$TGUI_DONWLOAD_URL" -O "$TGUI_ARCH_NAME"
+    unzip -qq "$TGUI_ARCH_NAME"
+    mv "$TGUI_EXTRACT_NAME" "$TGUI_RESULT_NAME"
+    rm -f "$TGUI_ARCH_NAME"
+    cd "$TGUI_RESULT_NAME"
+    mkdir -p bin
+    cd bin
+    cmake .. -DSFML_ROOT="$SFML_RESULT_DIR"
+    make -j 8
+    cd "$DEP_INSTALL_DIR"
 fi
 
 if [ -d $CATCH_RESULT_DIR ]; then

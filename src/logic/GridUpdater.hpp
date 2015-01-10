@@ -1,6 +1,8 @@
 #ifndef GOL_GRIDUPDATER_HPP
 #define GOL_GRIDUPDATER_HPP
 
+#include "logic/Grid.hpp"
+
 namespace gol
 {
     class GridUpdater

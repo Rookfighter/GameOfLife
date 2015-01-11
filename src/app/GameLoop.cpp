@@ -6,15 +6,16 @@
 namespace gol
 {
 
-    GameLoop::GameLoop(const std::function<void()> &update, const std::function<void()> &redraw)
+    GameLoop::GameLoop(const std::function<void()> &update, const std::function<void()> &redraw,  const std::function<void()> &processInput)
             : drawInterval_(sf::microseconds(DEF_INTERVAL)), updateInterval_(
                     sf::microseconds(DEF_INTERVAL)), timeAccount_(
                     sf::Time::Zero), lastRun_(sf::Time::Zero), paused_(false), keepRunning_(
                     false),
+                    processInput_(processInput),
                     update_(update),
                     redraw_(redraw)
     {
-        assert(update_ && redraw_);
+        assert(update_ && redraw_ && processInput_);
     }
 
     GameLoop::~GameLoop()
@@ -40,6 +41,7 @@ namespace gol
 
         while(keepRunning_) {
             clock.restart();
+            processInput_();
             while(timeAccount_ > updateInterval_ && !paused_) {
                 update_();
                 timeAccount_ -= updateInterval_;

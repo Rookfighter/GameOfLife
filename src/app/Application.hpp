@@ -1,6 +1,7 @@
 #ifndef GOL_APPLICATION_HPP
 #define GOL_APPLICATION_HPP
 
+#include "ui/GameWindow.hpp"
 #include "logic/World.hpp"
 #include "app/GameLoop.hpp"
 
@@ -11,10 +12,10 @@ namespace gol
     private:
         World world_;
         GameLoop gameLoop_;
-        sf::RenderWindow window_;
+        GameWindow window_;
 
+        void processInput();
         void update();
-        void redraw();
     public:
         Application();
         ~Application();

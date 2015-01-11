@@ -8,4 +8,4 @@ set(GOL_MAIN "main.cpp")
 add_library(${GOL_LIB} ${GOL_SRC})
 
 add_executable(${GOL_EXEC} ${GOL_MAIN})
-target_link_libraries(${GOL_EXEC} ${GOL_LIB} ${SFML_LIBRARIES})
+target_link_libraries(${GOL_EXEC} ${GOL_LIB} ${SFML_LIBRARIES} ${TGUI_LIBRARY})

@@ -58,8 +58,8 @@ else
     mv "$TGUI_EXTRACT_NAME" "$TGUI_RESULT_NAME"
     rm -f "$TGUI_ARCH_NAME"
     cd "$TGUI_RESULT_NAME"
-    mkdir -p bin
-    cd bin
+    mkdir -p build
+    cd build
     cmake .. -DSFML_ROOT="$SFML_RESULT_DIR"
     make -j 8
     cd "$DEP_INSTALL_DIR"

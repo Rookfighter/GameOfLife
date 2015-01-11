@@ -17,12 +17,13 @@ namespace gol
         bool paused_;
         bool keepRunning_;
 
+        std::function<void()> processInput_;
         std::function<void()> update_;
         std::function<void()> redraw_;
 
         void run();
     public:
-        GameLoop(const std::function<void()> &update, const std::function<void()> &redraw);
+        GameLoop(const std::function<void()> &update, const std::function<void()> &redraw, const std::function<void()> &processInput);
         ~GameLoop();
 
         void start();

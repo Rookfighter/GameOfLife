@@ -1,7 +1,6 @@
 language: cpp
 
-compiler:
-  - gcc
+compiler: gcc
 
 before_install:
   # g++4.8.1
@@ -12,7 +11,8 @@ install:
   # g++4.8.1
   - sudo apt-get install -qq g++-4.8
   - export CXX="g++-4.8"
-  - sudo apt-get install cmake
+  - $CXX --version
+  - sudo apt-get install cmake libglew-dev libudev-dev
   - ./get-deps.sh
 
 script: mkdir -p build && cd build && cmake .. && make -j 8

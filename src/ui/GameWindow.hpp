@@ -16,6 +16,10 @@ namespace gol
         sf::RenderWindow window_;
         tgui::Gui gui_;
         ControlPanel controlPanel_;
+        sf::View gameView_;
+        bool scroll_;
+        int zoomTicks_;
+        sf::Vector2i lastPos_;
 
     public:
         GameWindow(World &world, GameLoop &gameLoop);

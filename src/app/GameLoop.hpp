@@ -14,9 +14,6 @@ namespace gol
         sf::Time timeAccount_;
         sf::Time lastRun_;
 
-
-        sf::Time drawIntervalBuff_;
-        sf::Time updateIntervalBuff_;
         volatile bool paused_;
         volatile bool keepRunning_;
 
@@ -24,6 +21,7 @@ namespace gol
         std::function<void()> update_;
         std::function<void()> redraw_;
 
+        float toFPS(const sf::Time &time) const;
         void run();
     public:
         GameLoop(const std::function<void()> &update, const std::function<void()> &redraw, const std::function<void()> &processInput);
@@ -40,6 +38,11 @@ namespace gol
 
         const sf::Time& getDrawInterval() const;
         const sf::Time& getUpdateInterval() const;
+        const sf::Time& getLastDuration() const;
+
+        float getDrawFPS() const;
+        float getUpdateFPS() const;
+        float getFPS() const;
     };
 
 }

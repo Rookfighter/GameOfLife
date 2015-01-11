@@ -15,7 +15,7 @@ namespace gol
         GameLoop &gameLoop_;
         tgui::Gui &gui_;
 
-        sf::Time initUpdateInterval_;
+        sf::Time baseUpdateInterval_;
 
         void playButtonClicked();
         void pauseButtonClicked();
@@ -24,6 +24,8 @@ namespace gol
     public:
         ControlPanel(World &world, GameLoop &gameLoop, tgui::Gui &gui);
         ~ControlPanel();
+
+
 
         void init();
     };

@@ -7,7 +7,7 @@ namespace gol
 {
 
     ControlPanel::ControlPanel(World& world, GameLoop& gameLoop, tgui::Gui &gui)
-            : world_(world), gameLoop_(gameLoop), gui_(gui), initUpdateInterval_()
+            : world_(world), gameLoop_(gameLoop), gui_(gui), baseUpdateInterval_()
     {
 
     }
@@ -18,7 +18,7 @@ namespace gol
 
     void ControlPanel::playButtonClicked()
     {
-        LOG(DEBUG)<< "Play Button clicked";
+        //LOG(DEBUG)<< "Play Button clicked";
 
         tgui::Panel::Ptr panel = gui_.get("ControlPanel");
         tgui::Button::Ptr playButton = panel->get("PlayButton");
@@ -33,7 +33,7 @@ namespace gol
 
     void ControlPanel::pauseButtonClicked()
     {
-        LOG(INFO)<< "Pause Button clicked";
+        //LOG(INFO)<< "Pause Button clicked";
 
         tgui::Panel::Ptr panel = gui_.get("ControlPanel");
         tgui::Button::Ptr playButton = panel->get("PlayButton");
@@ -48,13 +48,13 @@ namespace gol
 
     void ControlPanel::resetButtonClicked()
     {
-        LOG(INFO)<< "Reset Button clicked";
+        //LOG(INFO)<< "Reset Button clicked";
         world_.reset();
     }
 
     void ControlPanel::speedSliderMoved()
     {
-        LOG(INFO)<<"Speed Slider moved";
+        //LOG(INFO)<<"Speed Slider moved";
 
         tgui::Panel::Ptr panel = gui_.get("ControlPanel");
         tgui::Slider::Ptr speedSlider = panel->get("SpeedSlider");
@@ -62,20 +62,21 @@ namespace gol
 
         float speed = 1;
         for(unsigned int i = 1; i < speedSlider->getValue(); ++i)
-        speed *= 2;
+            speed *= 2;
 
         if(speedSlider->getValue() == 0)
-        speed = 0.5;
+            speed = 0.5;
         std::stringstream ss;
         ss.precision(1);
         ss << "Speed " << std::fixed << speed << "x";
         speedLabel->setText(ss.str());
-        gameLoop_.setUpdateInterval(initUpdateInterval_ / speed);
+        sf::Time interval = baseUpdateInterval_ * (1 / speed);
+        gameLoop_.setUpdateInterval(interval);
     }
 
     void ControlPanel::init()
     {
-        initUpdateInterval_ = gameLoop_.getUpdateInterval();
+        baseUpdateInterval_ = gameLoop_.getUpdateInterval();
         sf::Vector2f buttonPos, labelPos, sliderPos;
         sf::Vector2f buttonSize;
         float interWidgetSpace;
@@ -140,5 +141,4 @@ namespace gol
                 tgui::Slider::ValueChanged);
 
     }
-
 }

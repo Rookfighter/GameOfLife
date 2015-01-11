@@ -11,8 +11,7 @@ namespace gol
             const std::function<void()> &processInput)
             : drawInterval_(sf::microseconds(DEF_INTERVAL)), updateInterval_(
                     sf::microseconds(DEF_INTERVAL)), timeAccount_(
-                    sf::Time::Zero), lastRun_(sf::Time::Zero), drawIntervalBuff_(
-                    drawInterval_), updateIntervalBuff_(updateInterval_), paused_(
+                    sf::Time::Zero), lastRun_(sf::Time::Zero), paused_(
                     false), keepRunning_(false), processInput_(processInput), update_(
                     update), redraw_(redraw)
 
@@ -38,7 +37,7 @@ namespace gol
         redraw_();
         elapsed = clock.getElapsedTime();
         if(drawInterval_ > elapsed) {
-            toSleep = drawInterval_ - clock.getElapsedTime();
+            toSleep = drawInterval_ - elapsed;
             sf::sleep(toSleep);
         }
         lastRun_ = clock.getElapsedTime();
@@ -61,7 +60,7 @@ namespace gol
             // sleep if we were faster than redraw interval
             elapsed = clock.getElapsedTime();
             if(drawInterval_ > elapsed) {
-                toSleep = drawInterval_ - clock.getElapsedTime();
+                toSleep = drawInterval_ - elapsed;
                 sf::sleep(toSleep);
             }
             lastRun_ = clock.getElapsedTime();
@@ -70,11 +69,6 @@ namespace gol
                 timeAccount_ = sf::Time::Zero;
             else
                 timeAccount_ += lastRun_;
-
-            if(drawInterval_ != drawIntervalBuff_)
-                drawInterval_ = drawIntervalBuff_;
-            if(updateInterval_ != updateIntervalBuff_)
-                updateInterval_ = updateIntervalBuff_;
         }
     }
 
@@ -95,12 +89,12 @@ namespace gol
 
     void GameLoop::setDrawInterval(const sf::Time interval)
     {
-        drawIntervalBuff_ = interval;
+        drawInterval_ = interval;
     }
 
     void GameLoop::setUpdateInterval(const sf::Time interval)
     {
-        updateIntervalBuff_ = interval;
+        updateInterval_ = interval;
     }
 
     const sf::Time& GameLoop::getDrawInterval() const
@@ -111,5 +105,30 @@ namespace gol
     const sf::Time& GameLoop::getUpdateInterval() const
     {
         return updateInterval_;
+    }
+
+    const sf::Time& GameLoop::getLastDuration() const
+    {
+        return lastRun_;
+    }
+
+    float GameLoop::getDrawFPS() const
+    {
+        return toFPS(drawInterval_);
+    }
+
+    float GameLoop::getUpdateFPS() const
+    {
+        return toFPS(updateInterval_);
+    }
+
+    float GameLoop::getFPS() const
+    {
+        return toFPS(lastRun_);
+    }
+
+    float GameLoop::toFPS(const sf::Time &time) const
+    {
+        return 1000000.0f / ((float) time.asMicroseconds());
     }
 }

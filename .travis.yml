@@ -1,0 +1,5 @@
+install:
+    - sudo apt-get update -qq
+    - sudo apt-get install cmake
+    - ./get-deps.sh
+script: mkdir -p build && cd build && cmake .. && make -j 8

@@ -14,8 +14,11 @@ namespace gol
         sf::Time timeAccount_;
         sf::Time lastRun_;
 
-        bool paused_;
-        bool keepRunning_;
+
+        sf::Time drawIntervalBuff_;
+        sf::Time updateIntervalBuff_;
+        volatile bool paused_;
+        volatile bool keepRunning_;
 
         std::function<void()> processInput_;
         std::function<void()> update_;
@@ -34,6 +37,9 @@ namespace gol
 
         void setDrawInterval(const sf::Time interval);
         void setUpdateInterval(const sf::Time interval);
+
+        const sf::Time& getDrawInterval() const;
+        const sf::Time& getUpdateInterval() const;
     };
 
 }

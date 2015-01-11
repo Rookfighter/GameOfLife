@@ -6,11 +6,14 @@ namespace gol
 {
 
     Application::Application()
-    : world_(200, 200), gameLoop_(std::bind(&Application::update, this),
-            std::bind(&GameWindow::redraw, &window_), std::bind(&Application::processInput, this)), window_(world_)
+            : world_(200, 200), gameLoop_(std::bind(&Application::update, this),
+                    std::bind(&GameWindow::redraw, &window_),
+                    std::bind(&Application::processInput, this)), window_(
+                    world_, gameLoop_)
     {
         gameLoop_.setUpdateInterval(sf::milliseconds(100));
         world_.init(4000);
+        window_.init();
     }
 
     Application::~Application()

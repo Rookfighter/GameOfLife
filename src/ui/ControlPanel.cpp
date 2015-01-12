@@ -141,4 +141,9 @@ namespace gol
                 tgui::Slider::ValueChanged);
 
     }
+
+    tgui::Panel::Ptr ControlPanel::getPanel()
+    {
+        return gui_.get("ControlPanel");
+    }
 }

@@ -2,7 +2,7 @@
 #include "ui/GameWindow.hpp"
 
 #define WINDOW_TITLE "Game of Life"
-#define DEF_WIDTH 600
+#define DEF_WIDTH 800
 #define DEF_HEIGHT 600
 #define THEME_CONFIG_FILE "res/widgets/Black.conf"
 #define FONT_FILE "res/fonts/DejaVuSans.ttf"
@@ -14,8 +14,8 @@ namespace gol
             : world_(world), gameLoop_(gameLoop), window_(
                     sf::VideoMode(DEF_WIDTH, DEF_HEIGHT),
                     WINDOW_TITLE), gui_(window_), controlPanel_(world_,
-                    gameLoop_, gui_), gameView_(window_.getDefaultView()), scroll_(
-                    false), zoomTicks_(0)
+                    gameLoop_, gui_), gameView_(window_.getDefaultView()), guiView_(
+                    window_.getDefaultView()), scroll_(false), zoomTicks_(0)
     {
     }
 
@@ -52,8 +52,8 @@ namespace gol
         window_.setView(gameView_);
         world_.draw(window_);
 
-        window_.setView(window_.getDefaultView());
-        gui_.draw();
+        window_.setView(guiView_);
+        gui_.draw(false);
         window_.display();
     }
 
@@ -70,14 +70,25 @@ namespace gol
                     lastPos_.y = event.mouseButton.y;
                 }
             } else if(event.type == sf::Event::Resized) {
+                sf::Vector2f newSize(event.size.width, event.size.height);
+                sf::Vector2f diff = newSize - gameView_.getSize();
 
+                gameView_.setSize(newSize);
+                guiView_.setSize(newSize);
+                guiView_.setCenter(((float) event.size.width) / 2, ((float) event.size.height) / 2);
+                tgui::Panel::Ptr panel = controlPanel_.getPanel();
+                panel->setSize(event.size.width, panel->getSize().y);
+                panel->setPosition(0, guiView_.getSize().y - panel->getSize().y);
             } else if(event.type == sf::Event::MouseButtonReleased) {
                 if(event.mouseButton.button == sf::Mouse::Left)
                     scroll_ = false;
             } else if(event.type == sf::Event::MouseMoved) {
                 if(scroll_) {
-                    sf::Vector2f last = window_.mapPixelToCoords(lastPos_, gameView_);
-                    sf::Vector2f curr = window_.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y), gameView_);
+                    sf::Vector2f last = window_.mapPixelToCoords(lastPos_,
+                            gameView_);
+                    sf::Vector2f curr = window_.mapPixelToCoords(
+                            sf::Vector2i(event.mouseMove.x, event.mouseMove.y),
+                            gameView_);
                     sf::Vector2f diff = last - curr;
 
                     gameView_.move(diff);
@@ -95,11 +106,8 @@ namespace gol
                     zoomFac *= ZOOM_PER_TICK;
                     ++zoomTicks;
                 }
-                //sf::Vector2f center = window_.mapPixelToCoords(sf::Vector2i(event.mouseWheel.x, event.mouseWheel.y), gameView_);
-                //gameView_.setCenter(center);
                 gameView_.zoom(zoomFac);
             }
-
             gui_.handleEvent(event);
         }
     }

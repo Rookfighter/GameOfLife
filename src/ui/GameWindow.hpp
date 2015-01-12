@@ -17,6 +17,7 @@ namespace gol
         tgui::Gui gui_;
         ControlPanel controlPanel_;
         sf::View gameView_;
+        sf::View guiView_;
         bool scroll_;
         int zoomTicks_;
         sf::Vector2i lastPos_;

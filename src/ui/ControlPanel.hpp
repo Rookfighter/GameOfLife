@@ -25,7 +25,7 @@ namespace gol
         ControlPanel(World &world, GameLoop &gameLoop, tgui::Gui &gui);
         ~ControlPanel();
 
-
+        tgui::Panel::Ptr getPanel();
 
         void init();
     };

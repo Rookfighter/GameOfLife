@@ -79,13 +79,15 @@ namespace gol
         baseUpdateInterval_ = gameLoop_.getUpdateInterval();
         sf::Vector2f buttonPos, labelPos, sliderPos;
         sf::Vector2f buttonSize;
+        sf::Vector2f windowSize(gui_.getSize());
         float interWidgetSpace;
 
-        tgui::Panel::Ptr panel(gui_, "ControlPanel");
-        panel->setSize(gui_.getSize().x, gui_.getSize().y / 12);
-        panel->setPosition(0, gui_.getSize().x - panel->getSize().y);
 
-        buttonSize.x = gui_.getSize().x / 8;
+        tgui::Panel::Ptr panel(gui_, "ControlPanel");
+        panel->setSize(windowSize.x, windowSize.y / 12);
+        panel->setPosition(0, windowSize.y - panel->getSize().y);
+
+        buttonSize.x = windowSize.x / 8;
         buttonSize.y = panel->getSize().y * 0.75;
         interWidgetSpace = (panel->getSize().y - buttonSize.y);
 

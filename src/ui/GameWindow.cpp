@@ -71,14 +71,15 @@ namespace gol
                 }
             } else if(event.type == sf::Event::Resized) {
                 sf::Vector2f newSize(event.size.width, event.size.height);
-                sf::Vector2f diff = newSize - gameView_.getSize();
 
                 gameView_.setSize(newSize);
                 guiView_.setSize(newSize);
-                guiView_.setCenter(((float) event.size.width) / 2, ((float) event.size.height) / 2);
+                guiView_.setCenter(((float) event.size.width) / 2,
+                        ((float) event.size.height) / 2);
                 tgui::Panel::Ptr panel = controlPanel_.getPanel();
                 panel->setSize(event.size.width, panel->getSize().y);
-                panel->setPosition(0, guiView_.getSize().y - panel->getSize().y);
+                panel->setPosition(0,
+                        guiView_.getSize().y - panel->getSize().y);
             } else if(event.type == sf::Event::MouseButtonReleased) {
                 if(event.mouseButton.button == sf::Mouse::Left)
                     scroll_ = false;
@@ -108,7 +109,7 @@ namespace gol
                 }
                 gameView_.zoom(zoomFac);
             }
-            gui_.handleEvent(event);
+            gui_.handleEvent(event, false);
         }
     }
 

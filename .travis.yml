@@ -13,7 +13,7 @@ install:
   - export CXX="g++-4.8"
   - $CXX --version
   - sudo apt-get install cmake libglew-dev libudev-dev
-  - sudo ln -s /usr/lib64/libGLEW.so /usr/lib64/libGLEW.so.1.10
+  - sudo ln -s /usr/lib/libGLEW.so /usr/lib/libGLEW.so.1.10
   - ./get-deps.sh
 
 script: mkdir -p build && cd build && cmake .. && make -j 8

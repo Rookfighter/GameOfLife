@@ -7,7 +7,7 @@ namespace gol
 {
 
     ControlPanel::ControlPanel(World& world, GameLoop& gameLoop, tgui::Gui &gui)
-            : world_(world), gameLoop_(gameLoop), gui_(gui), baseUpdateInterval_()
+            : world_(world), gameLoop_(gameLoop), gui_(gui), baseUpdateInterval_(), mouseEntered_(false)
     {
 
     }
@@ -16,10 +16,18 @@ namespace gol
     {
     }
 
+    void ControlPanel::panelCallback(const tgui::Callback &callback)
+    {
+        if(callback.trigger == tgui::Panel::MouseEntered) {
+            mouseEntered_ = true;
+        } else if(callback.trigger == tgui::Panel::MouseLeft) {
+            mouseEntered_ = false;
+        }
+    }
+
+
     void ControlPanel::playButtonClicked()
     {
-        //LOG(DEBUG)<< "Play Button clicked";
-
         tgui::Panel::Ptr panel = gui_.get("ControlPanel");
         tgui::Button::Ptr playButton = panel->get("PlayButton");
         tgui::Button::Ptr pauseButton = panel->get("PauseButton");
@@ -33,8 +41,6 @@ namespace gol
 
     void ControlPanel::pauseButtonClicked()
     {
-        //LOG(INFO)<< "Pause Button clicked";
-
         tgui::Panel::Ptr panel = gui_.get("ControlPanel");
         tgui::Button::Ptr playButton = panel->get("PlayButton");
         tgui::Button::Ptr pauseButton = panel->get("PauseButton");
@@ -48,14 +54,11 @@ namespace gol
 
     void ControlPanel::resetButtonClicked()
     {
-        //LOG(INFO)<< "Reset Button clicked";
         world_.reset();
     }
 
     void ControlPanel::speedSliderMoved()
     {
-        //LOG(INFO)<<"Speed Slider moved";
-
         tgui::Panel::Ptr panel = gui_.get("ControlPanel");
         tgui::Slider::Ptr speedSlider = panel->get("SpeedSlider");
         tgui::Label::Ptr speedLabel = panel->get("SpeedLabel");
@@ -82,10 +85,10 @@ namespace gol
         sf::Vector2f windowSize(gui_.getSize());
         float interWidgetSpace;
 
-
         tgui::Panel::Ptr panel(gui_, "ControlPanel");
         panel->setSize(windowSize.x, windowSize.y / 12);
         panel->setPosition(0, windowSize.y - panel->getSize().y);
+        panel->bindCallbackEx(&ControlPanel::panelCallback, this, tgui::Panel::MouseEntered | tgui::Panel::MouseLeft);
 
         buttonSize.x = windowSize.x / 8;
         buttonSize.y = panel->getSize().y * 0.75;
@@ -128,24 +131,37 @@ namespace gol
         speedLabel->setPosition(labelPos);
         speedLabel->setTextColor(sf::Color::Black);
 
-        tgui::Slider::Ptr speedSlider(*panel, "SpeedSlider");
-        speedSlider->load(THEME_CONFIG_FILE);
-        speedSlider->setSize(panel->getSize().x / 3, panel->getSize().y / 2.5);
-        speedSlider->setVerticalScroll(false);
-        speedSlider->setValue(1);
-        speedSlider->setMinimum(0);
-        speedSlider->setMaximum(4);
-        sliderPos.y = (panel->getSize().y - speedSlider->getSize().y) / 2;
+        panel->add(speedSlider_, "SpeedSlider");
+        speedSlider_->load(THEME_CONFIG_FILE);
+        speedSlider_->setSize(panel->getSize().x / 3, panel->getSize().y / 2.5);
+        speedSlider_->setVerticalScroll(false);
+        speedSlider_->setValue(1);
+        speedSlider_->setMinimum(0);
+        speedSlider_->setMaximum(4);
+        sliderPos.y = (panel->getSize().y - speedSlider_->getSize().y) / 2;
         sliderPos.x = labelPos.x + speedLabel->getSize().x
                 + 2 * interWidgetSpace;
-        speedSlider->setPosition(sliderPos);
-        speedSlider->bindCallback(&ControlPanel::speedSliderMoved, this,
+        speedSlider_->setPosition(sliderPos);
+        speedSlider_->bindCallback(&ControlPanel::speedSliderMoved, this,
                 tgui::Slider::ValueChanged);
-
     }
 
     tgui::Panel::Ptr ControlPanel::getPanel()
     {
         return gui_.get("ControlPanel");
+    }
+
+    void ControlPanel::handleEvent(const sf::Event &event)
+    {
+        if(event.type == event.Resized) {
+            tgui::Panel::Ptr panel = getPanel();
+            panel->setSize(event.size.width, panel->getSize().y);
+            panel->setPosition(0, ((float) event.size.height) - panel->getSize().y);
+        }
+    }
+
+    bool ControlPanel::mouseEntered() const
+    {
+        return mouseEntered_;
     }
 }

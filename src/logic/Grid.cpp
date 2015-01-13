@@ -32,7 +32,7 @@ namespace gol
     void Grid::reset()
     {
         for(unsigned int x = 0; x < map_.size(); ++x)
-            for(unsigned int y = 0; y < map_.size(); ++y)
+            for(unsigned int y = 0; y < map_[x].size(); ++y)
                 map_[x][y].setState(Cell::State::DEAD);
 
         livingCells_.clear();

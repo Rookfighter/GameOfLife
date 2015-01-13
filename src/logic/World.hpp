@@ -15,13 +15,15 @@ namespace gol
 
         GridUpdater updater_;
         GridDrawer drawer_;
+
+        void populate(const unsigned int initLivingCells);
     public:
         World();
         World(const unsigned int width, const unsigned int height);
         ~World();
 
-        void init(unsigned int initLivingCells);
-        void resize(const unsigned int width, const unsigned int height);
+        void repopulate(const unsigned int initLivingCells);
+        void reinit(const unsigned int width, const unsigned int height, const unsigned int initLivingCells);
         void reset();
 
         const Grid& getGrid() const;

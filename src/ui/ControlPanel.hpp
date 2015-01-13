@@ -16,11 +16,16 @@ namespace gol
         tgui::Gui &gui_;
 
         sf::Time baseUpdateInterval_;
+        bool mouseEntered_;
 
+        tgui::Slider::Ptr speedSlider_;
+
+        void panelCallback(const tgui::Callback &callback);
         void playButtonClicked();
         void pauseButtonClicked();
         void resetButtonClicked();
         void speedSliderMoved();
+        void speedSliderGrabbed();
     public:
         ControlPanel(World &world, GameLoop &gameLoop, tgui::Gui &gui);
         ~ControlPanel();
@@ -28,6 +33,8 @@ namespace gol
         tgui::Panel::Ptr getPanel();
 
         void init();
+        void handleEvent(const sf::Event &event);
+        bool mouseEntered() const;
     };
 
 }

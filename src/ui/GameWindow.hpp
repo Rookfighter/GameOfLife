@@ -4,6 +4,7 @@
 #include <TGUI/TGUI.hpp>
 #include "app/GameLoop.hpp"
 #include "ui/ControlPanel.hpp"
+#include "ui/GameMenu.hpp"
 #include "logic/World.hpp"
 
 namespace gol
@@ -16,12 +17,15 @@ namespace gol
         sf::RenderWindow window_;
         tgui::Gui gui_;
         ControlPanel controlPanel_;
+        GameMenu gameMenu_;
         sf::View gameView_;
         sf::View guiView_;
         bool scroll_;
         int zoomTicks_;
         sf::Vector2i lastPos_;
 
+        bool isAllowedToHandleInput() const;
+        void handleInput(const sf::Event &event);
     public:
         GameWindow(World &world, GameLoop &gameLoop);
         ~GameWindow();

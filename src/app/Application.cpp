@@ -12,7 +12,7 @@ namespace gol
                     world_, gameLoop_)
     {
         gameLoop_.setUpdateInterval(sf::milliseconds(100));
-        world_.init(4000);
+        world_.repopulate(4000);
         window_.init();
     }
 

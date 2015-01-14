@@ -12,10 +12,7 @@ install:
   - sudo apt-get install -qq g++-4.8
   - export CXX="g++-4.8"
   - $CXX --version
-  - sudo apt-get install cmake libglew-dev libudev-dev
-  - wget http://ftp.de.debian.org/debian/pool/main/g/glew/libglew-dev_1.10.0-3_amd64.deb -O libglew-dev.deb && sudo dpkg -i libglew-dev.deb
-  - ./get-deps.sh
-
+  - sudo apt-get install cmake libglu1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew-dev libjpeg-dev libsndfile1-dev libopenal-dev
+  - ./script/travis/install-deps
+  
 script: mkdir -p build && cd build && cmake .. && make -j 8
-    
-

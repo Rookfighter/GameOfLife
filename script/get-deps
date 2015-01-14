@@ -2,9 +2,9 @@
 
 CURRDIR=$PWD
 BASEDIR=$(cd "$(dirname "$0")"; pwd)
-echo $BASEDIR
+cd "$BASEDIR/.."
 
-DEP_INSTALL_DIR="$BASEDIR/lib"
+DEP_INSTALL_DIR="$PWD/lib"
 
 # Information for getting SFML
 SFML_ARCH_NAME="SFML-2.2.tar.gz"

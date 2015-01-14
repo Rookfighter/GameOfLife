@@ -1,1 +1,1 @@
-# GameOfLife ![](https://travis-ci.org/Rookfighter/GameOfLife.svg?branch=master])
+# GameOfLife ![](https://travis-ci.org/Rookfighter/GameOfLife.svg?branch=master)

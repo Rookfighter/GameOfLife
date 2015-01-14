@@ -12,7 +12,7 @@ install:
   - sudo apt-get install -qq g++-4.8
   - export CXX="g++-4.8"
   - $CXX --version
-  - sudo apt-get install cmake libglu1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew-dev libjpeg-dev libsndfile1-dev libopenal-dev
+  - sudo apt-get install cmake libglu1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew-dev libjpeg-dev libsndfile1-dev libopenal-dev libudev-dev
   - ./script/travis/install-deps
   
 script: mkdir -p build && cd build && cmake .. && make -j 8

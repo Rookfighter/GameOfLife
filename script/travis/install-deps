@@ -29,6 +29,7 @@ else
     cd lib
     cmake ..
     make -j 8
+    sudo make install
     cd "$DEP_INSTALL_DIR"
 fi
 

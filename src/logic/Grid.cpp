@@ -10,8 +10,10 @@ namespace gol
     }
 
     Grid::Grid(const unsigned int width, const unsigned int height)
+    :width_(width), height_(height), map_(width * height), livingCells_(coordIsLess)
     {
-        resize(width, height);
+        assert(width > 0 && height > 0);
+        reset();
     }
 
     Grid::~Grid()
@@ -22,63 +24,73 @@ namespace gol
     {
         assert(width > 0 && height > 0);
 
-        map_.resize(width);
-        for(unsigned int x = 0; x < width; ++x)
-            map_[x].resize(height);
+        width_ = width;
+        height_ = height;
 
+        map_.resize(width_ * height_);
         reset();
     }
 
     void Grid::reset()
     {
-        for(unsigned int x = 0; x < map_.size(); ++x)
-            for(unsigned int y = 0; y < map_[x].size(); ++y)
-                map_[x][y].setState(Cell::State::DEAD);
-
+        for(unsigned int i = 0; i < map_.size(); ++i)
+            map_[i].setState(Cell::State::DEAD);
         livingCells_.clear();
     }
 
-    void Grid::setStateOf(const unsigned int x, const unsigned y,
-            const Cell::State state)
+    unsigned int Grid::index(const unsigned int x, const unsigned int y) const
     {
-        assert(x < getWidth() && y < getHeight());
-
-        if(map_[x][y].getState() == Cell::State::ALIVE
-                && state != Cell::State::ALIVE) {
-            // remove cell from the living list
-            livingCells_.remove(Coordinate(x, y));
-        } else if(map_[x][y].getState() != Cell::State::ALIVE
-                && state == Cell::State::ALIVE) {
-            // add cell to living list
-            livingCells_.push_back(Coordinate(x, y));
-        }
-
-        map_[x][y].setState(state);
+        return x + y * width_;
     }
 
-    Cell::State Grid::getStateOf(const unsigned int x, const unsigned y) const
+    void Grid::setStateOf(const unsigned int x, const unsigned int y,
+            const Cell::State state)
     {
-        assert(x < getWidth() && y < getHeight());
+        assert(x < width_ && y < height_);
 
-        return map_[x][y].getState();
+        unsigned int idx = index(x,y);
+
+        if(map_[idx].getState() == Cell::State::ALIVE
+                && state != Cell::State::ALIVE) {
+            // remove cell from the living list
+            livingCells_.erase(Coordinate(x, y));
+        } else if(map_[idx].getState() != Cell::State::ALIVE
+                && state == Cell::State::ALIVE) {
+            // add cell to living list
+            livingCells_.insert(Coordinate(x, y));
+        }
+
+        map_[idx].setState(state);
+    }
+
+    Cell::State Grid::getStateOf(const unsigned int x, const unsigned int y) const
+    {
+        assert(x < width_ && y < height_);
+
+        return map_[index(x,y)].getState();
     }
 
     unsigned int Grid::getWidth() const
     {
-        return map_.size();
+        return width_;
     }
 
     unsigned int Grid::getHeight() const
     {
-        return map_[0].size();
+        return height_;
     }
 
-    const std::vector<std::vector<Cell> >& Grid::getMap() const
+    unsigned int Grid::getCount() const
+    {
+        return map_.size();
+    }
+
+    const std::vector<Cell>& Grid::getMap() const
     {
         return map_;
     }
 
-    const std::list<Coordinate> Grid::getLivingCells() const
+    const std::set<Coordinate, bool (*) (const Coordinate&, const Coordinate&)>& Grid::getLivingCells() const
     {
         return livingCells_;
     }

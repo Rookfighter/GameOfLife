@@ -1,3 +1,4 @@
+#include <cassert>
 #include "logic/World.hpp"
 #include "utils/Random.hpp"
 
@@ -20,9 +21,12 @@ namespace gol
 
     void World::populate(const unsigned int initLivingCells)
     {
+        assert(initLivingCells <= grid_.getCount());
+
         for(unsigned int i = 0; i < initLivingCells; ++i) {
             unsigned int x = Random::nextInt(grid_.getWidth());
             unsigned int y = Random::nextInt(grid_.getHeight());
+
 
             //TODO add timeout
             while(grid_.getStateOf(x, y) == Cell::State::ALIVE) {
@@ -32,8 +36,8 @@ namespace gol
 
             grid_.setStateOf(x, y, Cell::State::ALIVE);
         }
-
-        initialLivingCells_ = grid_.getLivingCells();
+        initialLivingCells_.clear();
+        initialLivingCells_.insert(initialLivingCells_.begin(), grid_.getLivingCells().begin(), grid_.getLivingCells().end());
     }
 
     void World::repopulate(const unsigned int initLivingCells)

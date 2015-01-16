@@ -1,6 +1,7 @@
 #ifndef LOGIC_WORLD_HPP
 #define LOGIC_WORLD_HPP
 
+#include <list>
 #include "logic/GridUpdater.hpp"
 #include "logic/GridDrawer.hpp"
 

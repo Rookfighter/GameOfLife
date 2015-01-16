@@ -15,7 +15,7 @@ namespace gol
     void GridDrawer::draw(sf::RenderTarget& target) const
     {
         sf::VertexArray vertexArray(sf::Quads,
-                grid_.getWidth() * grid_.getHeight() * 4);
+                grid_.getCount() * 4);
         sf::Vector2f topLeft(0, 0);
         sf::Vector2f cellSize(2, 2);
 

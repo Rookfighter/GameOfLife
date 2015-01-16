@@ -27,7 +27,6 @@ namespace gol
             unsigned int x = Random::nextInt(grid_.getWidth());
             unsigned int y = Random::nextInt(grid_.getHeight());
 
-
             //TODO add timeout
             while(grid_.getStateOf(x, y) == Cell::State::ALIVE) {
                 x = Random::nextInt(grid_.getWidth());
@@ -37,7 +36,8 @@ namespace gol
             grid_.setStateOf(x, y, Cell::State::ALIVE);
         }
         initialLivingCells_.clear();
-        initialLivingCells_.insert(initialLivingCells_.begin(), grid_.getLivingCells().begin(), grid_.getLivingCells().end());
+        initialLivingCells_.insert(initialLivingCells_.begin(),
+                grid_.getLivingCells().begin(), grid_.getLivingCells().end());
     }
 
     void World::repopulate(const unsigned int initLivingCells)
@@ -72,7 +72,7 @@ namespace gol
         updater_.update();
     }
 
-    void World::draw(sf::RenderTarget& target) const
+    void World::draw(sf::RenderTarget& target)
     {
         drawer_.draw(target);
     }

@@ -30,7 +30,7 @@ namespace gol
         const Grid& getGrid() const;
 
         void update();
-        void draw(sf::RenderTarget& target) const;
+        void draw(sf::RenderTarget& target);
     };
 
 }

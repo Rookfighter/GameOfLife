@@ -2,18 +2,8 @@
 
 namespace gol
 {
-    static int getHashCode(const Coordinate &coord)
-    {
-        return 137 * coord.x + 149 * coord.y;
-    }
-
-    static bool isLess(const Coordinate &coord1, const Coordinate &coord2)
-    {
-        return getHashCode(coord1) < getHashCode(coord2);
-    }
-
     GridUpdater::GridUpdater(Grid& grid)
-            : grid_(grid), willDie_(isLess), willBeBorn_(isLess)
+            : grid_(grid), willDie_(coordIsLess), willBeBorn_(coordIsLess)
     {
     }
 
@@ -44,7 +34,7 @@ namespace gol
 
             // check for all dead neighbours if they will get alive
             for(unsigned int i = 0; i < deadCount; ++i) {
-                unsigned livingCountTmp = NEIGHBOURS
+                unsigned int livingCountTmp = NEIGHBOURS
                         - getDeadNeighbours(deadNeighbours[i], dummyNeighbours);
                 if(livingCountTmp == 3)
                     willBeBorn_.insert(deadNeighbours[i]);

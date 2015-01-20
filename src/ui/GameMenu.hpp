@@ -21,15 +21,22 @@ namespace gol
         tgui::EditBox::Ptr widthEdit_;
         tgui::EditBox::Ptr heightEdit_;
 
+        tgui::ChildWindow::Ptr controlsDialog_;
+
         bool dialogOpen_;
 
-        void initResizeDialog();
         void menuItemClicked(const tgui::Callback &callback);
+
+        void initResizeDialog();
         void clearResizeEdits();
         void openResizeDialog();
         void closeResizeDialog();
         void resizeCancel();
         void resizeApply();
+
+        void initControlsDialog();
+        void openControlsDialog();
+        void closeControlsDialog();
     public:
         GameMenu(World &world, GameLoop &gameLoop, tgui::Gui &gui);
         ~GameMenu();

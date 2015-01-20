@@ -104,7 +104,7 @@ namespace gol
         return map_[index(x,y)].getState();
     }
 
-    unsigned int Grid::getLivingCellsOf(const unsigned int x, const unsigned int y) const
+    unsigned int Grid::getLivingNeighboursOf(const unsigned int x, const unsigned int y) const
     {
         assert(x < width_ && y < height_);
 

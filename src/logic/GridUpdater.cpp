@@ -25,7 +25,7 @@ namespace gol
 
         for(unsigned int x = 0; x < grid_.getWidth(); ++x) {
             for(unsigned int y = 0; y < grid_.getHeight(); ++y) {
-                livingNeighbours = grid_.getLivingCellsOf(x,y);
+                livingNeighbours = grid_.getLivingNeighboursOf(x,y);
 
                 if(grid_.getStateOf(x,y) == Cell::State::ALIVE) {
                     // cell is alive

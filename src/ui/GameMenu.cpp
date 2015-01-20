@@ -32,9 +32,17 @@ namespace gol
 
         menu->addMenu("Help");
         menu->addMenuItem("Help", "Controls");
-        menu->addMenuItem("Help", "About");
 
         initResizeDialog();
+        initControlsDialog();
+    }
+
+    void GameMenu::menuItemClicked(const tgui::Callback &callback)
+    {
+        if(callback.text == "Resize")
+            openResizeDialog();
+        else if(callback.text == "Controls")
+            openControlsDialog();
     }
 
     void GameMenu::initResizeDialog()
@@ -119,14 +127,11 @@ namespace gol
         heightEdit_->setText("");
     }
 
-    void GameMenu::menuItemClicked(const tgui::Callback &callback)
-    {
-        if(callback.text == "Resize")
-            openResizeDialog();
-    }
-
     void GameMenu::openResizeDialog()
     {
+        if(dialogOpen_)
+           return;
+
         clearResizeEdits();
         infoLabel_->setText("");
         float x = gui_.getSize().x / 2 - resizeDialog_->getSize().x / 2;
@@ -165,6 +170,64 @@ namespace gol
             closeResizeDialog();
         }
     }
+
+    void GameMenu::initControlsDialog()
+        {
+            sf::Vector2f dialogSize(400, 200);
+            gui_.add(controlsDialog_, "ResizeDialog");
+            controlsDialog_->load(THEME_CONFIG_FILE);
+            controlsDialog_->setSize(dialogSize.x, dialogSize.y);
+            controlsDialog_->setPosition(0, 0);
+            controlsDialog_->setTitle("Controls");
+            controlsDialog_->bindCallback(&GameMenu::closeControlsDialog, this, tgui::ChildWindow::Closed);
+
+            tgui::Grid::Ptr grid(*controlsDialog_);
+            grid->setSize(dialogSize.x, dialogSize.y);
+
+            tgui::Label::Ptr labelLeftMB(*grid);
+            labelLeftMB->load(THEME_CONFIG_FILE);
+            labelLeftMB->setText("Left Mouse Button:");
+            labelLeftMB->setTextSize(18);
+            grid->addWidget(labelLeftMB, 0, 0);
+
+            tgui::Label::Ptr labelLeftMBCtrl(*grid);
+            labelLeftMBCtrl->load(THEME_CONFIG_FILE);
+            labelLeftMBCtrl->setText("Scroll");
+            labelLeftMBCtrl->setTextSize(18);
+            grid->addWidget(labelLeftMBCtrl, 0, 1);
+
+            tgui::Label::Ptr labelRightMB(*grid);
+            labelRightMB->load(THEME_CONFIG_FILE);
+            labelRightMB->setText("Right Mouse Button:");
+            labelRightMB->setTextSize(18);
+            grid->addWidget(labelRightMB, 1, 0);
+
+            tgui::Label::Ptr labelRightMBCtrl(*grid);
+            labelRightMBCtrl->load(THEME_CONFIG_FILE);
+            labelRightMBCtrl->setText("Paint Living Cells");
+            labelRightMBCtrl->setTextSize(18);
+            grid->addWidget(labelRightMBCtrl, 1, 1);
+
+            grid->updateWidgets();
+            closeControlsDialog();
+        }
+
+        void GameMenu::openControlsDialog()
+        {
+            if(dialogOpen_)
+                return;
+
+            dialogOpen_ = true;
+            controlsDialog_->show();
+            controlsDialog_->enable();
+        }
+
+        void GameMenu::closeControlsDialog()
+        {
+            controlsDialog_->disable();
+            controlsDialog_->hide();
+            dialogOpen_ = false;
+        }
 
     void GameMenu::handleEvent(const sf::Event &event)
     {

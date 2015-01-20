@@ -29,7 +29,7 @@ namespace gol
         void setStateOf(const unsigned int x, const unsigned int y, const Cell::State state);
 
         Cell::State getStateOf(const unsigned int x, const unsigned int y) const;
-        unsigned int getLivingCellsOf(const unsigned int x, const unsigned int y) const;
+        unsigned int getLivingNeighboursOf(const unsigned int x, const unsigned int y) const;
         unsigned int getWidth() const;
         unsigned int getHeight() const;
         unsigned int getCount() const;

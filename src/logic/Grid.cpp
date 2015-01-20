@@ -5,12 +5,12 @@ namespace gol
 {
 
     Grid::Grid()
-            :Grid(3, 3)
+            : Grid(3, 3)
     {
     }
 
     Grid::Grid(const unsigned int width, const unsigned int height)
-    :width_(width), height_(height), map_(width * height)
+            : width_(width), height_(height), map_(width * height)
     {
         assert(width > 0 && height > 0);
         reset();
@@ -50,24 +50,25 @@ namespace gol
         assert(x < width_ && y < height_);
         std::array<unsigned int, NEIGHBOURS> neighbours;
         getNeighbours(x, y, neighbours);
-        unsigned int idx = index(x,y);
+        unsigned int idx = index(x, y);
 
         if(map_[idx].getState() == Cell::State::ALIVE
                 && state != Cell::State::ALIVE) {
             // cell died
-            for(unsigned int neighbour: neighbours)
+            for(unsigned int neighbour : neighbours)
                 map_[neighbour].decLivingNeighbours();
         } else if(map_[idx].getState() != Cell::State::ALIVE
                 && state == Cell::State::ALIVE) {
             // cell was born
-            for(unsigned int neighbour: neighbours)
+            for(unsigned int neighbour : neighbours)
                 map_[neighbour].incLivingNeighbours();
         }
 
         map_[idx].setState(state);
     }
 
-    void Grid::getNeighbours(const unsigned int x, const unsigned int y, std::array<unsigned int, NEIGHBOURS> &result)
+    void Grid::getNeighbours(const unsigned int x, const unsigned int y,
+            std::array<unsigned int, NEIGHBOURS> &result)
     {
         unsigned int currx, curry;
 
@@ -97,18 +98,20 @@ namespace gol
         result[7] = index(currx, curry);
     }
 
-    Cell::State Grid::getStateOf(const unsigned int x, const unsigned int y) const
+    Cell::State Grid::getStateOf(const unsigned int x,
+            const unsigned int y) const
     {
         assert(x < width_ && y < height_);
 
-        return map_[index(x,y)].getState();
+        return map_[index(x, y)].getState();
     }
 
-    unsigned int Grid::getLivingNeighboursOf(const unsigned int x, const unsigned int y) const
+    unsigned int Grid::getLivingNeighboursOf(const unsigned int x,
+            const unsigned int y) const
     {
         assert(x < width_ && y < height_);
 
-        return map_[index(x,y)].getLivingNeighbours();
+        return map_[index(x, y)].getLivingNeighbours();
     }
 
     unsigned int Grid::getWidth() const
@@ -119,6 +122,16 @@ namespace gol
     unsigned int Grid::getHeight() const
     {
         return height_;
+    }
+
+    float Grid::getCellWidth() const
+    {
+        return 2;
+    }
+
+    float Grid::getCellHeight() const
+    {
+        return 2;
     }
 
     unsigned int Grid::getCount() const

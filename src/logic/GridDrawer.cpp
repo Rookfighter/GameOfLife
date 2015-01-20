@@ -5,8 +5,7 @@ namespace gol
 
     GridDrawer::GridDrawer(Grid &grid)
             : grid_(grid), width_(grid_.getWidth()), height_(grid_.getHeight()), vertexArray_(
-                    sf::Quads, grid_.getCount() * 4), background_(sf::Quads, 4), cellSize_(
-                    2, 2)
+                    sf::Quads, grid_.getCount() * 4), background_(sf::Quads, 4), cellSize_(grid_.getCellWidth(), grid_.getCellHeight())
     {
         for(unsigned int i = 0; i < background_.getVertexCount(); ++i)
             background_[i].color = sf::Color::White;

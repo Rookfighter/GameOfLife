@@ -5,6 +5,7 @@
 #include "app/GameLoop.hpp"
 #include "ui/ControlPanel.hpp"
 #include "ui/GameMenu.hpp"
+#include "ui/WindowState.hpp"
 #include "logic/World.hpp"
 
 namespace gol
@@ -12,17 +13,15 @@ namespace gol
     class GameWindow
     {
     private:
-        World &world_;
+        WindowProperties properties_;
         GameLoop &gameLoop_;
         sf::RenderWindow window_;
         tgui::Gui gui_;
         ControlPanel controlPanel_;
         GameMenu gameMenu_;
-        sf::View gameView_;
-        sf::View guiView_;
-        bool scroll_;
         int zoomTicks_;
-        sf::Vector2i lastPos_;
+
+        WindowState *state_;
 
         bool isAllowedToHandleInput() const;
         void handleInput(const sf::Event &event);

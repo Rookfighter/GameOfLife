@@ -61,6 +61,11 @@ namespace gol
         }
     }
 
+    void World::birthCell(const unsigned int x, const unsigned int y)
+    {
+        grid_.setStateOf(x,y, Cell::State::ALIVE);
+    }
+
     const Grid& World::getGrid() const
     {
         return grid_;

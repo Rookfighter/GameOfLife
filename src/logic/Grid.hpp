@@ -33,6 +33,8 @@ namespace gol
         unsigned int getWidth() const;
         unsigned int getHeight() const;
         unsigned int getCount() const;
+        float getCellWidth() const;
+        float getCellHeight() const;
         const std::vector<Cell>& getMap() const;
 
     };

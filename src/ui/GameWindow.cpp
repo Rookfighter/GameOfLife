@@ -1,5 +1,6 @@
 #include <easylogging++.h>
 #include "ui/GameWindow.hpp"
+#include "ui/WaitingState.hpp"
 
 #define WINDOW_TITLE "Game of Life"
 #define DEF_WIDTH 800
@@ -11,17 +12,19 @@
 namespace gol
 {
     GameWindow::GameWindow(World &world, GameLoop &gameLoop)
-            : world_(world), gameLoop_(gameLoop), window_(
+            : properties_(world,window_), gameLoop_(gameLoop), window_(
                     sf::VideoMode(DEF_WIDTH, DEF_HEIGHT),
-                    WINDOW_TITLE), gui_(window_), controlPanel_(world_,
-                    gameLoop_, gui_), gameMenu_(world_, gameLoop_, gui_), gameView_(
-                    window_.getDefaultView()), guiView_(
-                    window_.getDefaultView()), scroll_(false), zoomTicks_(0)
+                    WINDOW_TITLE), gui_(window_), controlPanel_(world,
+                    gameLoop_, gui_), gameMenu_(world, gameLoop_, gui_), zoomTicks_(
+                    0), state_(new WaitingState(properties_))
     {
+        properties_.setGameView(window_.getDefaultView());
+        properties_.setGuiView(window_.getDefaultView());
     }
 
     GameWindow::~GameWindow()
     {
+        delete state_;
     }
 
     void GameWindow::init()
@@ -51,10 +54,10 @@ namespace gol
         label->setText(ss.str());
 
         window_.clear();
-        window_.setView(gameView_);
-        world_.draw(window_);
+        window_.setView(properties_.getGameView());
+        properties_.getWorld().draw(window_);
 
-        window_.setView(guiView_);
+        window_.setView(properties_.getGuiView());
         gui_.draw(false);
         window_.display();
     }
@@ -71,13 +74,15 @@ namespace gol
             } else if(event.type == sf::Event::Resized) {
                 sf::Vector2f newSize(event.size.width, event.size.height);
 
-                gameView_.setSize(newSize);
-                guiView_.setSize(newSize);
-                guiView_.setCenter(((float) event.size.width) / 2,
+                properties_.getGameView().setSize(newSize);
+                properties_.getGuiView().setSize(newSize);
+                properties_.getGuiView().setCenter(
+                        ((float) event.size.width) / 2,
                         ((float) event.size.height) / 2);
 
                 tgui::Label::Ptr fpsLabel = gui_.get("FPSLabel");
-                fpsLabel->setPosition(window_.getSize().x - fpsLabel->getSize().x, 20);
+                fpsLabel->setPosition(
+                        window_.getSize().x - fpsLabel->getSize().x, 20);
             }
 
             controlPanel_.handleEvent(event);
@@ -88,29 +93,13 @@ namespace gol
 
     void GameWindow::handleInput(const sf::Event &event)
     {
-        if(event.type == sf::Event::MouseButtonPressed) {
-            if(event.mouseButton.button == sf::Mouse::Left) {
-                scroll_ = true;
-                lastPos_.x = event.mouseButton.x;
-                lastPos_.y = event.mouseButton.y;
-            }
-        } else if(event.type == sf::Event::MouseButtonReleased) {
-            if(event.mouseButton.button == sf::Mouse::Left)
-                scroll_ = false;
-        } else if(event.type == sf::Event::MouseMoved) {
-            if(scroll_) {
-                sf::Vector2f last = window_.mapPixelToCoords(lastPos_,
-                        gameView_);
-                sf::Vector2f curr = window_.mapPixelToCoords(
-                        sf::Vector2i(event.mouseMove.x, event.mouseMove.y),
-                        gameView_);
-                sf::Vector2f diff = last - curr;
+        WindowState* nextState = state_->handleInput(event);
+        if(nextState != nullptr) {
+            delete state_;
+            state_ = nextState;
+        }
 
-                gameView_.move(diff);
-                lastPos_.x = event.mouseMove.x;
-                lastPos_.y = event.mouseMove.y;
-            }
-        } else if(event.type == sf::Event::MouseWheelMoved) {
+        if(event.type == sf::Event::MouseWheelMoved) {
             float zoomFac = 1.0f;
             int zoomTicks = event.mouseWheel.delta;
             while(zoomTicks > 0) {
@@ -121,7 +110,7 @@ namespace gol
                 zoomFac *= ZOOM_PER_TICK;
                 ++zoomTicks;
             }
-            gameView_.zoom(zoomFac);
+            properties_.getGameView().zoom(zoomFac);
         }
     }
 

@@ -25,6 +25,7 @@ namespace gol
         void repopulate(const unsigned int initLivingCells);
         void reinit(const unsigned int width, const unsigned int height, const unsigned int initLivingCells);
         void reset();
+        void birthCell(const unsigned int x, const unsigned int y);
 
         const Grid& getGrid() const;
 

@@ -1,7 +1,6 @@
 #ifndef LOGIC_WORLD_HPP
 #define LOGIC_WORLD_HPP
 
-#include <list>
 #include "logic/GridUpdater.hpp"
 #include "logic/GridDrawer.hpp"
 
@@ -11,7 +10,7 @@ namespace gol
     class World
     {
     private:
-        std::list<Coordinate> initialLivingCells_;
+        std::vector<Coordinate> initialLivingCells_;
         Grid grid_;
 
         GridUpdater updater_;

@@ -22,6 +22,7 @@ namespace gol
     void World::populate(const unsigned int initLivingCells)
     {
         assert(initLivingCells <= grid_.getCount());
+        initialLivingCells_.resize(initLivingCells);
 
         for(unsigned int i = 0; i < initLivingCells; ++i) {
             unsigned int x = Random::nextInt(grid_.getWidth());
@@ -34,10 +35,8 @@ namespace gol
             }
 
             grid_.setStateOf(x, y, Cell::State::ALIVE);
+            initialLivingCells_[i] = Coordinate(x,y);
         }
-        initialLivingCells_.clear();
-        initialLivingCells_.insert(initialLivingCells_.begin(),
-                grid_.getLivingCells().begin(), grid_.getLivingCells().end());
     }
 
     void World::repopulate(const unsigned int initLivingCells)

@@ -10,7 +10,7 @@ namespace gol
     }
 
     Grid::Grid(const unsigned int width, const unsigned int height)
-    :width_(width), height_(height), map_(width * height), livingCells_(coordIsLess)
+    :width_(width), height_(height), map_(width * height)
     {
         assert(width > 0 && height > 0);
         reset();
@@ -33,9 +33,10 @@ namespace gol
 
     void Grid::reset()
     {
-        for(unsigned int i = 0; i < map_.size(); ++i)
+        for(unsigned int i = 0; i < map_.size(); ++i) {
             map_[i].setState(Cell::State::DEAD);
-        livingCells_.clear();
+            map_[i].setLivingNeighbours(0);
+        }
     }
 
     unsigned int Grid::index(const unsigned int x, const unsigned int y) const
@@ -47,20 +48,53 @@ namespace gol
             const Cell::State state)
     {
         assert(x < width_ && y < height_);
-
+        std::array<unsigned int, NEIGHBOURS> neighbours;
+        getNeighbours(x, y, neighbours);
         unsigned int idx = index(x,y);
 
         if(map_[idx].getState() == Cell::State::ALIVE
                 && state != Cell::State::ALIVE) {
-            // remove cell from the living list
-            livingCells_.erase(Coordinate(x, y));
+            // cell died
+            for(unsigned int neighbour: neighbours)
+                map_[neighbour].decLivingNeighbours();
         } else if(map_[idx].getState() != Cell::State::ALIVE
                 && state == Cell::State::ALIVE) {
-            // add cell to living list
-            livingCells_.insert(Coordinate(x, y));
+            // cell was born
+            for(unsigned int neighbour: neighbours)
+                map_[neighbour].incLivingNeighbours();
         }
 
         map_[idx].setState(state);
+    }
+
+    void Grid::getNeighbours(const unsigned int x, const unsigned int y, std::array<unsigned int, NEIGHBOURS> &result)
+    {
+        unsigned int currx, curry;
+
+        // check right column
+        currx = (x + 1) % width_;
+        curry = y;
+        result[0] = index(currx, curry);
+        curry = (y + 1) % height_;
+        result[1] = index(currx, curry);
+        curry = (y - 1) % height_;
+        result[2] = index(currx, curry);
+
+        // check mid column
+        currx = x;
+        curry = (y + 1) % height_;
+        result[3] = index(currx, curry);
+        curry = (y - 1) % height_;
+        result[4] = index(currx, curry);
+
+        // check left column
+        currx = (x - 1) % width_;
+        curry = y;
+        result[5] = index(currx, curry);
+        curry = (y + 1) % height_;
+        result[6] = index(currx, curry);
+        curry = (y - 1) % height_;
+        result[7] = index(currx, curry);
     }
 
     Cell::State Grid::getStateOf(const unsigned int x, const unsigned int y) const
@@ -68,6 +102,13 @@ namespace gol
         assert(x < width_ && y < height_);
 
         return map_[index(x,y)].getState();
+    }
+
+    unsigned int Grid::getLivingCellsOf(const unsigned int x, const unsigned int y) const
+    {
+        assert(x < width_ && y < height_);
+
+        return map_[index(x,y)].getLivingNeighbours();
     }
 
     unsigned int Grid::getWidth() const
@@ -88,11 +129,6 @@ namespace gol
     const std::vector<Cell>& Grid::getMap() const
     {
         return map_;
-    }
-
-    const std::set<Coordinate, bool (*) (const Coordinate&, const Coordinate&)>& Grid::getLivingCells() const
-    {
-        return livingCells_;
     }
 
 }

@@ -3,7 +3,7 @@
 namespace gol
 {
     GridUpdater::GridUpdater(Grid& grid)
-            : grid_(grid), willDie_(coordIsLess), willBeBorn_(coordIsLess)
+            : grid_(grid), willDie_(), willBeBorn_()
     {
     }
 
@@ -21,23 +21,23 @@ namespace gol
     {
         willBeBorn_.clear();
         willDie_.clear();
-        std::array<Coordinate, NEIGHBOURS> deadNeighbours;
-        std::array<Coordinate, NEIGHBOURS> dummyNeighbours;
+        unsigned int livingNeighbours;
 
-        for(Coordinate coord : grid_.getLivingCells()) {
-            // check if this Cell will die
-            unsigned int deadCount = getDeadNeighbours(coord, deadNeighbours);
-            unsigned int livingCount = NEIGHBOURS - deadCount;
+        for(unsigned int x = 0; x < grid_.getWidth(); ++x) {
+            for(unsigned int y = 0; y < grid_.getHeight(); ++y) {
+                livingNeighbours = grid_.getLivingCellsOf(x,y);
 
-            if(livingCount < 2 || livingCount > 3)
-                willDie_.insert(coord);
-
-            // check for all dead neighbours if they will get alive
-            for(unsigned int i = 0; i < deadCount; ++i) {
-                unsigned int livingCountTmp = NEIGHBOURS
-                        - getDeadNeighbours(deadNeighbours[i], dummyNeighbours);
-                if(livingCountTmp == 3)
-                    willBeBorn_.insert(deadNeighbours[i]);
+                if(grid_.getStateOf(x,y) == Cell::State::ALIVE) {
+                    // cell is alive
+                    if(livingNeighbours < 2 || livingNeighbours > 3) {
+                        willDie_.push_back(Coordinate(x,y));
+                    }
+                } else {
+                    // cell is dead
+                    if(livingNeighbours == 3) {
+                        willBeBorn_.push_back(Coordinate(x,y));
+                    }
+                }
             }
         }
     }
@@ -50,69 +50,4 @@ namespace gol
         for(Coordinate coord : willBeBorn_)
             grid_.setStateOf(coord.x, coord.y, Cell::State::ALIVE);
     }
-
-    unsigned int GridUpdater::getDeadNeighbours(const Coordinate &coordinate,
-            std::array<Coordinate, NEIGHBOURS> &neighbours)
-    {
-        unsigned int result = 0;
-        int x, y;
-
-        //check right side
-        x = (coordinate.x + 1) % grid_.getWidth();
-        y = coordinate.y;
-        if(grid_.getStateOf(x, y) == Cell::State::DEAD) {
-            neighbours[result].set(x, y);
-            ++result;
-        }
-
-        y = (coordinate.y + 1) % grid_.getHeight();
-        if(grid_.getStateOf(x, y) == Cell::State::DEAD) {
-            neighbours[result].set(x, y);
-            ++result;
-        }
-
-        y = (coordinate.y - 1) % grid_.getHeight();
-        if(grid_.getStateOf(x, y) == Cell::State::DEAD) {
-            neighbours[result].set(x, y);
-            ++result;
-        }
-
-        // check left side
-        x = (coordinate.x - 1) % grid_.getWidth();
-        y = coordinate.y;
-        if(grid_.getStateOf(x, y) == Cell::State::DEAD) {
-            neighbours[result].set(x, y);
-            ++result;
-        }
-
-        y = (coordinate.y + 1) % grid_.getHeight();
-        if(grid_.getStateOf(x, y) == Cell::State::DEAD) {
-            neighbours[result].set(x, y);
-            ++result;
-        }
-
-        y = (coordinate.y - 1) % grid_.getHeight();
-        if(grid_.getStateOf(x, y) == Cell::State::DEAD) {
-            neighbours[result].set(x, y);
-            ++result;
-        }
-
-        // check top mid
-        x = coordinate.x;
-        y = (coordinate.y + 1) % grid_.getHeight();
-        if(grid_.getStateOf(x, y) == Cell::State::DEAD) {
-            neighbours[result].set(x, y);
-            ++result;
-        }
-
-        // check bot mid
-        y = (coordinate.y - 1) % grid_.getHeight();
-        if(grid_.getStateOf(x, y) == Cell::State::DEAD) {
-            neighbours[result].set(x, y);
-            ++result;
-        }
-
-        return result;
-    }
-
 }
